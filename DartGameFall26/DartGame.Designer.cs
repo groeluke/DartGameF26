@@ -1,6 +1,6 @@
 ﻿namespace DartGameFall26
 {
-    partial class Form1
+    partial class DartGame
     {
         /// <summary>
         ///  Required designer variable.
