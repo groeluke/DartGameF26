@@ -71,7 +71,8 @@
             Controls.Add(DrawPictureBox);
             Controls.Add(ExitButton);
             Name = "DartGame";
-            Text = "Form1";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Dart Game";
             ((System.ComponentModel.ISupportInitialize)DrawPictureBox).EndInit();
             ResumeLayout(false);
         }
