@@ -37,6 +37,7 @@
             // 
             // ExitButton
             // 
+            ExitButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             ExitButton.Location = new Point(556, 520);
             ExitButton.Name = "ExitButton";
             ExitButton.Size = new Size(163, 58);
@@ -47,6 +48,7 @@
             // 
             // DrawPictureBox
             // 
+            DrawPictureBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             DrawPictureBox.Location = new Point(36, 24);
             DrawPictureBox.Name = "DrawPictureBox";
             DrawPictureBox.Size = new Size(683, 490);
@@ -55,6 +57,7 @@
             // 
             // ThrowDartButton
             // 
+            ThrowDartButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             ThrowDartButton.Location = new Point(387, 520);
             ThrowDartButton.Name = "ThrowDartButton";
             ThrowDartButton.Size = new Size(163, 58);
@@ -65,6 +68,7 @@
             // 
             // DrawSpiralButton
             // 
+            DrawSpiralButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             DrawSpiralButton.Location = new Point(218, 520);
             DrawSpiralButton.Name = "DrawSpiralButton";
             DrawSpiralButton.Size = new Size(163, 58);

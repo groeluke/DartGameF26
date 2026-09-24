@@ -21,16 +21,24 @@ namespace DartGameFall26
         }
 
         void Spiral()
-        {
-            System.Math.Cos(0);
-            System.Math.Sin(5);
+        { 
+            double x = 100 * Math.Cos(45 * (Math.PI/180)); // calculates the x coordinate of the spiral
+            double y = 100 * Math.Sin(45 * (Math.PI / 180)); // calculates the y coordinate of the spiral
+
+            for (int i = 0; i < 360; i ++) // loops through the angles of the spiral
+            {
+
+                x = 100 * Math.Cos(i * (Math.PI / 180)); // calculates the x coordinate of the spiral
+                y = 100 * Math.Sin(i * (Math.PI / 180)); // calculates the y coordinate of the spiral
+                DrawDart((int)x + DrawPictureBox.Width / 2, (int)y + DrawPictureBox.Height / 2); // draws a dart at the calculated coordinates
+            }
         }
 
         void DrawDart(int x, int y)
         {
             Graphics g = DrawPictureBox.CreateGraphics();   // makes the drawing object
             Pen thePen = new Pen(Color.FromArgb(GetNumberFrom(255), GetNumberFrom(255), GetNumberFrom(255))); // makes the background white
-            int size = GetNumberFrom(169);
+            int size = GetNumberFrom(1000);
             thePen.Width = GetNumberFrom(7);
 
             g.DrawEllipse(thePen, x - size / 2, y - size / 2, size, size);        // draws the dartboard
