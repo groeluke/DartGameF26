@@ -31,12 +31,13 @@
             ExitButton = new Button();
             DrawPictureBox = new PictureBox();
             ThrowDartButton = new Button();
+            DrawSpiralButton = new Button();
             ((System.ComponentModel.ISupportInitialize)DrawPictureBox).BeginInit();
             SuspendLayout();
             // 
             // ExitButton
             // 
-            ExitButton.Location = new Point(625, 380);
+            ExitButton.Location = new Point(556, 520);
             ExitButton.Name = "ExitButton";
             ExitButton.Size = new Size(163, 58);
             ExitButton.TabIndex = 0;
@@ -48,13 +49,13 @@
             // 
             DrawPictureBox.Location = new Point(36, 24);
             DrawPictureBox.Name = "DrawPictureBox";
-            DrawPictureBox.Size = new Size(736, 340);
+            DrawPictureBox.Size = new Size(683, 490);
             DrawPictureBox.TabIndex = 1;
             DrawPictureBox.TabStop = false;
             // 
             // ThrowDartButton
             // 
-            ThrowDartButton.Location = new Point(456, 380);
+            ThrowDartButton.Location = new Point(387, 520);
             ThrowDartButton.Name = "ThrowDartButton";
             ThrowDartButton.Size = new Size(163, 58);
             ThrowDartButton.TabIndex = 2;
@@ -62,11 +63,22 @@
             ThrowDartButton.UseVisualStyleBackColor = true;
             ThrowDartButton.Click += ThrowDartButton_Click;
             // 
+            // DrawSpiralButton
+            // 
+            DrawSpiralButton.Location = new Point(218, 520);
+            DrawSpiralButton.Name = "DrawSpiralButton";
+            DrawSpiralButton.Size = new Size(163, 58);
+            DrawSpiralButton.TabIndex = 3;
+            DrawSpiralButton.Text = "Draw &Spiral";
+            DrawSpiralButton.UseVisualStyleBackColor = true;
+            DrawSpiralButton.Click += DrawSpiralButton_Click;
+            // 
             // DartGame
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(731, 590);
+            Controls.Add(DrawSpiralButton);
             Controls.Add(ThrowDartButton);
             Controls.Add(DrawPictureBox);
             Controls.Add(ExitButton);
@@ -82,5 +94,6 @@
         private Button ExitButton;
         private PictureBox DrawPictureBox;
         private Button ThrowDartButton;
+        private Button DrawSpiralButton;
     }
 }
