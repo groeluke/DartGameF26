@@ -28,12 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             ExitButton = new Button();
             DartBoardPictureBox = new PictureBox();
             ReviewButton = new Button();
             StartRoundButton = new Button();
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             RoundsListBox = new ListBox();
+            MainToolTip = new ToolTip(components);
             ((System.ComponentModel.ISupportInitialize)DartBoardPictureBox).BeginInit();
             SuspendLayout();
             // 
@@ -45,6 +47,7 @@
             ExitButton.Size = new Size(163, 58);
             ExitButton.TabIndex = 0;
             ExitButton.Text = "E&xit";
+            MainToolTip.SetToolTip(ExitButton, "Quit the game");
             ExitButton.UseVisualStyleBackColor = true;
             ExitButton.Click += ExitButton_Click;
             // 
@@ -58,6 +61,7 @@
             DartBoardPictureBox.Size = new Size(514, 490);
             DartBoardPictureBox.TabIndex = 1;
             DartBoardPictureBox.TabStop = false;
+            MainToolTip.SetToolTip(DartBoardPictureBox, "Press Space to throw a dart");
             // 
             // ReviewButton
             // 
@@ -67,6 +71,7 @@
             ReviewButton.Size = new Size(163, 58);
             ReviewButton.TabIndex = 2;
             ReviewButton.Text = "&Review Game ";
+            MainToolTip.SetToolTip(ReviewButton, "Review previously logged rounds");
             ReviewButton.UseVisualStyleBackColor = true;
             ReviewButton.Click += ReviewButton_Click;
             // 
@@ -78,6 +83,7 @@
             StartRoundButton.Size = new Size(163, 58);
             StartRoundButton.TabIndex = 3;
             StartRoundButton.Text = "&Start Round";
+            MainToolTip.SetToolTip(StartRoundButton, "Start a new round of 3 darts");
             StartRoundButton.UseVisualStyleBackColor = true;
             StartRoundButton.Click += StartRoundButton_Click;
             // 
@@ -88,6 +94,7 @@
             RoundsListBox.Name = "RoundsListBox";
             RoundsListBox.Size = new Size(180, 154);
             RoundsListBox.TabIndex = 4;
+            MainToolTip.SetToolTip(RoundsListBox, "Pick a round to see its darts");
             RoundsListBox.SelectedIndexChanged += RoundsListBox_SelectedIndexChanged;
             // 
             // DartGame
@@ -115,5 +122,6 @@
         private Button StartRoundButton;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private ListBox RoundsListBox;
+        private ToolTip MainToolTip;
     }
 }
