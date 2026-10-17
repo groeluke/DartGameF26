@@ -29,10 +29,12 @@
         private void InitializeComponent()
         {
             ExitButton = new Button();
-            DrawPictureBox = new PictureBox();
-            ThrowDartButton = new Button();
-            DrawSpiralButton = new Button();
-            ((System.ComponentModel.ISupportInitialize)DrawPictureBox).BeginInit();
+            DartBoardPictureBox = new PictureBox();
+            ReviewButton = new Button();
+            StartRoundButton = new Button();
+            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            RoundsListBox = new ListBox();
+            ((System.ComponentModel.ISupportInitialize)DartBoardPictureBox).BeginInit();
             SuspendLayout();
             // 
             // ExitButton
@@ -46,58 +48,72 @@
             ExitButton.UseVisualStyleBackColor = true;
             ExitButton.Click += ExitButton_Click;
             // 
-            // DrawPictureBox
+            // DartBoardPictureBox
             // 
-            DrawPictureBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            DrawPictureBox.Location = new Point(36, 24);
-            DrawPictureBox.Name = "DrawPictureBox";
-            DrawPictureBox.Size = new Size(683, 490);
-            DrawPictureBox.TabIndex = 1;
-            DrawPictureBox.TabStop = false;
+            DartBoardPictureBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            DartBoardPictureBox.BackgroundImage = Properties.Resources.minecraft_end_portal_dartboard;
+            DartBoardPictureBox.BackgroundImageLayout = ImageLayout.Zoom;
+            DartBoardPictureBox.Location = new Point(12, 12);
+            DartBoardPictureBox.Name = "DartBoardPictureBox";
+            DartBoardPictureBox.Size = new Size(514, 490);
+            DartBoardPictureBox.TabIndex = 1;
+            DartBoardPictureBox.TabStop = false;
             // 
-            // ThrowDartButton
+            // ReviewButton
             // 
-            ThrowDartButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            ThrowDartButton.Location = new Point(387, 520);
-            ThrowDartButton.Name = "ThrowDartButton";
-            ThrowDartButton.Size = new Size(163, 58);
-            ThrowDartButton.TabIndex = 2;
-            ThrowDartButton.Text = "Throw &Dart";
-            ThrowDartButton.UseVisualStyleBackColor = true;
-            ThrowDartButton.Click += ThrowDartButton_Click;
+            ReviewButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            ReviewButton.Location = new Point(556, 456);
+            ReviewButton.Name = "ReviewButton";
+            ReviewButton.Size = new Size(163, 58);
+            ReviewButton.TabIndex = 2;
+            ReviewButton.Text = "&Review Game ";
+            ReviewButton.UseVisualStyleBackColor = true;
+            ReviewButton.Click += ReviewButton_Click;
             // 
-            // DrawSpiralButton
+            // StartRoundButton
             // 
-            DrawSpiralButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            DrawSpiralButton.Location = new Point(218, 520);
-            DrawSpiralButton.Name = "DrawSpiralButton";
-            DrawSpiralButton.Size = new Size(163, 58);
-            DrawSpiralButton.TabIndex = 3;
-            DrawSpiralButton.Text = "Draw &Spiral";
-            DrawSpiralButton.UseVisualStyleBackColor = true;
-            DrawSpiralButton.Click += DrawSpiralButton_Click;
+            StartRoundButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            StartRoundButton.Location = new Point(556, 392);
+            StartRoundButton.Name = "StartRoundButton";
+            StartRoundButton.Size = new Size(163, 58);
+            StartRoundButton.TabIndex = 3;
+            StartRoundButton.Text = "&Start Round";
+            StartRoundButton.UseVisualStyleBackColor = true;
+            StartRoundButton.Click += StartRoundButton_Click;
+            // 
+            // RoundsListBox
+            // 
+            RoundsListBox.FormattingEnabled = true;
+            RoundsListBox.Location = new Point(539, 12);
+            RoundsListBox.Name = "RoundsListBox";
+            RoundsListBox.Size = new Size(180, 154);
+            RoundsListBox.TabIndex = 4;
+            RoundsListBox.SelectedIndexChanged += RoundsListBox_SelectedIndexChanged;
             // 
             // DartGame
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(731, 590);
-            Controls.Add(DrawSpiralButton);
-            Controls.Add(ThrowDartButton);
-            Controls.Add(DrawPictureBox);
+            Controls.Add(RoundsListBox);
+            Controls.Add(StartRoundButton);
+            Controls.Add(ReviewButton);
+            Controls.Add(DartBoardPictureBox);
             Controls.Add(ExitButton);
             Name = "DartGame";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Dart Game";
-            ((System.ComponentModel.ISupportInitialize)DrawPictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)DartBoardPictureBox).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
         private Button ExitButton;
-        private PictureBox DrawPictureBox;
-        private Button ThrowDartButton;
-        private Button DrawSpiralButton;
+        private PictureBox DartBoardPictureBox;
+        private Button ReviewButton;
+        private Button StartRoundButton;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private ListBox RoundsListBox;
     }
 }

@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace DartGameFall26
 /*Luke Groesbeck
 *Fall 2026
@@ -12,6 +14,26 @@ namespace DartGameFall26
         public DartGame()
         {
             InitializeComponent();
+            SetDefaults();
+            DartBoardPictureBox.KeyDown += DartBoardPictureBox_SpaceBar; // allows the user to use the spacebar to throw a dart
+        }
+        Label RoundLabel = new Label();
+        Label ThrowLabel = new Label();
+        Label ModelLabel = new Label();
+        const string LogPath = "..\\..\\..\\DartGame.log"; // same relative path trick as your File IO practice
+        Random random = new Random();                      // ONE Random for the whole form
+        bool roundInProgress = false;   // true while the user is throwing darts
+        bool reviewMode = false;        // true while reviewing old rounds
+        int currentRound = 0;
+        int throwCount = 0;             // how many darts thrown this round (0-3)
+        int[] dartX = new int[3];       // the 3 dart positions for the current round
+        int[] dartY = new int[3];
+        List<int[]> loggedRounds = new List<int[]>();  // rounds read from the file
+
+        void SetDefaults()
+        {
+            //DartBoardPictureBox.BackgroundImage = Properties.Resources.DartBoard; // sets the background image of the dartboard
+            //RoundsListBox.SelectedIndex = 0; // sets the default round to 1
         }
 
         int GetNumberFrom(int max, int min = 0)
@@ -22,7 +44,7 @@ namespace DartGameFall26
 
         void DrawDart(int x, int y)
         {
-            Graphics g = DrawPictureBox.CreateGraphics();   // makes the drawing object
+            Graphics g = DartBoardPictureBox.CreateGraphics();   // makes the drawing object
             Pen thePen = new Pen(Color.FromArgb(GetNumberFrom(255), GetNumberFrom(255), GetNumberFrom(255))); // makes the background white
             int size = GetNumberFrom(50);
             thePen.Width = GetNumberFrom(5);
@@ -33,9 +55,15 @@ namespace DartGameFall26
 
             thePen.Dispose();                               // cleans up the pen object
             g.Dispose();                                    // cleans up the drawing object
-
         }
 
+        void WritetoFile(string fileName, string text)
+        {
+            using (StreamWriter writer = new StreamWriter(fileName, true))
+            {
+                writer.WriteLine(text);
+            }
+        }
 
         //Event handlers below this***************************************
 
@@ -44,16 +72,58 @@ namespace DartGameFall26
             this.Close();
         }
 
-        private void ThrowDartButton_Click(object sender, EventArgs e)
+        private void DartBoardPictureBox_SpaceBar(object sender, KeyEventArgs e)
         {
-            int x = GetNumberFrom(DrawPictureBox.Width);
-            int y = GetNumberFrom(DrawPictureBox.Height);
-            DrawDart(x, y);                                 // calls the DrawDart method to draw a dart at a random location
+            if (e.KeyCode == Keys.Space)
+            {
+                int x = GetNumberFrom(DartBoardPictureBox.Width);
+                int y = GetNumberFrom(DartBoardPictureBox.Height);
+                DrawDart(x, y);                                 // calls the DrawDart method to draw a dart at a random location
+            }
         }
 
-        private void DrawSpiralButton_Click(object sender, EventArgs e)
+        private void StartRoundButton_Click(object sender, EventArgs e)
         {
-            
+            // The method starts the round and allows the user to throw 3 darts before saving the location of
+            //the darts to a file. The user can then review the darts thrown in the round.
+            int rounds = RoundsListBox.SelectedIndex + 1; // Get the selected round number (1-based index)
+            for (int i = 0; i < rounds; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    int x = GetNumberFrom(DartBoardPictureBox.Width);
+                    int y = GetNumberFrom(DartBoardPictureBox.Height);
+                    WritetoFile("DartLocations.txt", $"{x},{y}");
+                }
+            }
+
+        }
+
+        private void ReviewButton_Click(object sender, EventArgs e)
+        {
+            // The method reads the dart locations from the file and draws them on the dartboard.
+            if (File.Exists("DartLocations.txt"))
+            {
+                string[] lines = File.ReadAllLines("DartLocations.txt");
+                foreach (string line in lines)
+                {
+                    string[] parts = line.Split(',');
+                    if (parts.Length == 2 && int.TryParse(parts[0], out int x) && int.TryParse(parts[1], out int y))
+                    {
+                        DrawDart(x, y);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("No dart locations found. Please throw some darts first.");
+            }
+
+        }
+
+        private void RoundsListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
