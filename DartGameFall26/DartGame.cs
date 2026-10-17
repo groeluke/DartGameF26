@@ -165,6 +165,7 @@ namespace DartGameFall26
                 System.Media.SystemSounds.Hand.Play();       // error sound for a miss
             }
         }
+
         //Event handlers below this***************************************
 
         private void ExitButton_Click(object sender, EventArgs e)
@@ -186,24 +187,24 @@ namespace DartGameFall26
                 return;
             }
 
-            // 1. pick a random spot for this dart
+            // pick a random spot for this dart
             dartX[throwCount] = GetRandomNumber(DartBoardPictureBox.ClientSize.Width);
             dartY[throwCount] = GetRandomNumber(DartBoardPictureBox.ClientSize.Height);
 
-            // 2. draw it and play the hit/miss sound
+            // draw it and play the hit/miss sound
             DrawDart(dartX[throwCount], dartY[throwCount]);
             PlayThrowSound(IsOnBoard(dartX[throwCount], dartY[throwCount]));
 
-            // 3. count the throw (only once!)
+            // count the throw (only once!)
             throwCount++;
 
-            if (throwCount == 3)         // round over: save it
+            if (throwCount == 3)         // after a round over save the 3 darts thrown
             {
                 LogRound();
                 roundInProgress = false;
                 MessageBox.Show($"Round {currentRound} logged!");
             }
-            UpdateLabels();
+ 
         }
 
         private void StartRoundButton_Click(object sender, EventArgs e)
