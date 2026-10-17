@@ -15,7 +15,6 @@ namespace DartGameFall26
         {
             InitializeComponent();
             SetDefaults();
-            DartBoardPictureBox.KeyDown += DartBoardPictureBox_SpaceBar; // allows the user to use the spacebar to throw a dart
         }
         Label RoundLabel = new Label();
         Label ThrowLabel = new Label();
@@ -32,8 +31,10 @@ namespace DartGameFall26
 
         void SetDefaults()
         {
-            //DartBoardPictureBox.BackgroundImage = Properties.Resources.DartBoard; // sets the background image of the dartboard
-            //RoundsListBox.SelectedIndex = 0; // sets the default round to 1
+            KeyPreview = true;
+            KeyDown += DartGame_KeyDown;
+            RoundsListBox.Enabled = false;
+            UpdateLabels();
         }
 
         int GetNumberFrom(int max, int min = 0)
@@ -45,16 +46,28 @@ namespace DartGameFall26
         void DrawDart(int x, int y)
         {
             Graphics g = DartBoardPictureBox.CreateGraphics();   // makes the drawing object
-            Pen thePen = new Pen(Color.FromArgb(GetNumberFrom(255), GetNumberFrom(255), GetNumberFrom(255))); // makes the background white
-            int size = GetNumberFrom(50);
-            thePen.Width = GetNumberFrom(5);
+            Pen thePen = new Pen(Color.Red);                     // makes the pen object
+            int size = 20;
+            thePen.Width = 3;
 
             g.DrawEllipse(thePen, x - size / 2, y - size / 2, size, size);        // draws the dartboard
-            g.DrawLine(thePen, x - 10, y, x + 10, y);        // draws the dartboard
-            g.DrawLine(thePen, x, y - 10, x, y + 10);        // draws the dartboard
+            g.DrawLine(thePen, x - 5, y, x + 5, y);        // draws the dartboard
+            g.DrawLine(thePen, x, y - 5, x, y + 5);        // draws the dartboard
 
             thePen.Dispose();                               // cleans up the pen object
             g.Dispose();                                    // cleans up the drawing object
+        }
+        
+        void ClearDartBoard()
+        {
+            DartBoardPictureBox.Refresh(); // Clears the dartboard by refreshing the PictureBox
+        }
+
+        void UpdateLabels()
+        {
+            RoundLabel.Text = $"Round: {currentRound}";
+            ThrowLabel.Text = $"Throw: {throwCount}";
+            ModelLabel.Text = reviewMode ? "Review Mode" : "Play Mode";
         }
 
         void WritetoFile(string fileName, string text)
