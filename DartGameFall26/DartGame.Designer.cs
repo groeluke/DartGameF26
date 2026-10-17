@@ -36,6 +36,9 @@
             backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             RoundsListBox = new ListBox();
             MainToolTip = new ToolTip(components);
+            RoundLabel = new Label();
+            ThrowLabel = new Label();
+            ModeLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)DartBoardPictureBox).BeginInit();
             SuspendLayout();
             // 
@@ -97,11 +100,41 @@
             MainToolTip.SetToolTip(RoundsListBox, "Pick a round to see its darts");
             RoundsListBox.SelectedIndexChanged += RoundsListBox_SelectedIndexChanged;
             // 
+            // RoundLabel
+            // 
+            RoundLabel.AutoSize = true;
+            RoundLabel.Location = new Point(539, 180);
+            RoundLabel.Name = "RoundLabel";
+            RoundLabel.Size = new Size(64, 25);
+            RoundLabel.TabIndex = 5;
+            RoundLabel.Text = "Round";
+            // 
+            // ThrowLabel
+            // 
+            ThrowLabel.AutoSize = true;
+            ThrowLabel.Location = new Point(539, 214);
+            ThrowLabel.Name = "ThrowLabel";
+            ThrowLabel.Size = new Size(71, 25);
+            ThrowLabel.TabIndex = 6;
+            ThrowLabel.Text = "Thrown";
+            // 
+            // ModeLabel
+            // 
+            ModeLabel.AutoSize = true;
+            ModeLabel.Location = new Point(539, 248);
+            ModeLabel.Name = "ModeLabel";
+            ModeLabel.Size = new Size(59, 25);
+            ModeLabel.TabIndex = 7;
+            ModeLabel.Text = "Mode";
+            // 
             // DartGame
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(731, 590);
+            Controls.Add(ModeLabel);
+            Controls.Add(ThrowLabel);
+            Controls.Add(RoundLabel);
             Controls.Add(RoundsListBox);
             Controls.Add(StartRoundButton);
             Controls.Add(ReviewButton);
@@ -112,6 +145,7 @@
             Text = "Dart Game";
             ((System.ComponentModel.ISupportInitialize)DartBoardPictureBox).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -123,5 +157,8 @@
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
         private ListBox RoundsListBox;
         private ToolTip MainToolTip;
+        private Label RoundLabel;
+        private Label ThrowLabel;
+        private Label ModeLabel;
     }
 }

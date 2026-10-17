@@ -16,9 +16,7 @@ namespace DartGameFall26
             InitializeComponent();
             SetDefaults();
         }
-        Label RoundLabel = new Label();
-        Label ThrowLabel = new Label();
-        Label ModelLabel = new Label();
+
         const string LogPath = "..\\..\\..\\DartGame.log"; // same relative path trick as your File IO practice
         Random random = new Random();                      // ONE Random for the whole form
         bool roundInProgress = false;   // true while the user is throwing darts
@@ -62,7 +60,7 @@ namespace DartGameFall26
         {
             RoundLabel.Text = $"Round: {currentRound}";
             ThrowLabel.Text = $"Throw: {throwCount}";
-            ModelLabel.Text = reviewMode ? "Review Mode" : "Play Mode";
+            ModeLabel.Text = reviewMode ? "Review Mode" : "Play Mode";
         }
 
         int GetRandomNumber(int max)
@@ -141,6 +139,32 @@ namespace DartGameFall26
             }
         }
 
+        //add noises for when the dart hits the board or misses the board
+        // Returns true if the dart landed on the dartboard circle.
+        bool IsOnBoard(int x, int y)
+        {
+            int centerX = DartBoardPictureBox.ClientSize.Width / 2;
+            int centerY = DartBoardPictureBox.ClientSize.Height / 2;
+
+            // The board is about 26% of the picture's smaller side (adjust if it feels off)
+            int smallerSide = Math.Min(DartBoardPictureBox.ClientSize.Width, DartBoardPictureBox.ClientSize.Height);
+            double boardRadius = smallerSide * 0.26;
+
+            double distance = Math.Sqrt(Math.Pow(x - centerX, 2) + Math.Pow(y - centerY, 2));
+            return distance <= boardRadius;
+        }
+
+        void PlayThrowSound(bool hit)
+        {
+            if (hit)
+            {
+                System.Media.SystemSounds.Asterisk.Play();   // "ding" for a hit
+            }
+            else
+            {
+                System.Media.SystemSounds.Hand.Play();       // error sound for a miss
+            }
+        }
         //Event handlers below this***************************************
 
         private void ExitButton_Click(object sender, EventArgs e)
@@ -162,9 +186,15 @@ namespace DartGameFall26
                 return;
             }
 
+            // 1. pick a random spot for this dart
             dartX[throwCount] = GetRandomNumber(DartBoardPictureBox.ClientSize.Width);
             dartY[throwCount] = GetRandomNumber(DartBoardPictureBox.ClientSize.Height);
+
+            // 2. draw it and play the hit/miss sound
             DrawDart(dartX[throwCount], dartY[throwCount]);
+            PlayThrowSound(IsOnBoard(dartX[throwCount], dartY[throwCount]));
+
+            // 3. count the throw (only once!)
             throwCount++;
 
             if (throwCount == 3)         // round over: save it
@@ -175,6 +205,7 @@ namespace DartGameFall26
             }
             UpdateLabels();
         }
+
         private void StartRoundButton_Click(object sender, EventArgs e)
         {
             reviewMode = false;
