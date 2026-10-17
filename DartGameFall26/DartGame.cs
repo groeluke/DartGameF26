@@ -37,11 +37,6 @@ namespace DartGameFall26
             UpdateLabels();
         }
 
-        int GetNumberFrom(int max, int min = 0)
-        {
-            Random randy = new Random();
-            return randy.Next(min, max + 1);
-        }
 
         void DrawDart(int x, int y)
         {
@@ -70,11 +65,79 @@ namespace DartGameFall26
             ModelLabel.Text = reviewMode ? "Review Mode" : "Play Mode";
         }
 
-        void WritetoFile(string fileName, string text)
+        int GetRandomNumber(int max)
         {
-            using (StreamWriter writer = new StreamWriter(fileName, true))
+            return random.Next(0, max);
+        }
+
+        // Turns one log line into 7 ints. Returns false if the line is corrupt.
+        bool TryReadRound(string line, out int[] values)
+        {
+            values = new int[7];
+            string[] parts = line.Split(',');
+            if (parts.Length != 7)
             {
-                writer.WriteLine(text);
+                return false;
+            }
+            for (int i = 0; i < 7; i++)
+            {
+                if (!int.TryParse(parts[i], out values[i]))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // Reads the whole log into loggedRounds, skipping bad lines.
+        void LoadRounds()
+        {
+            loggedRounds.Clear();
+            try
+            {
+                if (File.Exists(LogPath))
+                {
+                    foreach (string line in File.ReadAllLines(LogPath))
+                    {
+                        if (TryReadRound(line, out int[] values))
+                        {
+                            loggedRounds.Add(values);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Could not read the log file: " + ex.Message);
+            }
+        }
+
+        // Finds the highest round number so a new round continues from there.
+        int GetLastRoundNumber()
+        {
+            LoadRounds();
+            int last = 0;
+            foreach (int[] round in loggedRounds)
+            {
+                if (round[0] > last)
+                {
+                    last = round[0];
+                }
+            }
+            return last;
+        }
+
+        // Appends the finished round to the log (creates the file if it's missing).
+        void LogRound()
+        {
+            string line = $"{currentRound},{dartX[0]},{dartY[0]},{dartX[1]},{dartY[1]},{dartX[2]},{dartY[2]}";
+            try
+            {
+                File.AppendAllText(LogPath, line + Environment.NewLine);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Could not write to the log file: " + ex.Message);
             }
         }
 
@@ -85,58 +148,85 @@ namespace DartGameFall26
             this.Close();
         }
 
-        private void DartBoardPictureBox_SpaceBar(object sender, KeyEventArgs e)
+        private void DartGame_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Space)
+            if (e.KeyCode != Keys.Space)
             {
-                int x = GetNumberFrom(DartBoardPictureBox.Width);
-                int y = GetNumberFrom(DartBoardPictureBox.Height);
-                DrawDart(x, y);                                 // calls the DrawDart method to draw a dart at a random location
+                return;
             }
-        }
+            e.Handled = true;            // stops Space from "clicking" whichever button has focus
+            e.SuppressKeyPress = true;
 
+            if (!roundInProgress)        // ignore Space in review mode or before a round starts
+            {
+                return;
+            }
+
+            dartX[throwCount] = GetRandomNumber(DartBoardPictureBox.ClientSize.Width);
+            dartY[throwCount] = GetRandomNumber(DartBoardPictureBox.ClientSize.Height);
+            DrawDart(dartX[throwCount], dartY[throwCount]);
+            throwCount++;
+
+            if (throwCount == 3)         // round over: save it
+            {
+                LogRound();
+                roundInProgress = false;
+                MessageBox.Show($"Round {currentRound} logged!");
+            }
+            UpdateLabels();
+        }
         private void StartRoundButton_Click(object sender, EventArgs e)
         {
-            // The method starts the round and allows the user to throw 3 darts before saving the location of
-            //the darts to a file. The user can then review the darts thrown in the round.
-            int rounds = RoundsListBox.SelectedIndex + 1; // Get the selected round number (1-based index)
-            for (int i = 0; i < rounds; i++)
-            {
-                for (int j = 0; j < 3; j++)
-                {
-                    int x = GetNumberFrom(DartBoardPictureBox.Width);
-                    int y = GetNumberFrom(DartBoardPictureBox.Height);
-                    WritetoFile("DartLocations.txt", $"{x},{y}");
-                }
-            }
-
+            reviewMode = false;
+            RoundsListBox.Enabled = false;
+            RoundsListBox.Items.Clear();
+            ClearDartBoard();
+            currentRound = GetLastRoundNumber() + 1;
+            throwCount = 0;
+            roundInProgress = true;
+            UpdateLabels();
         }
 
         private void ReviewButton_Click(object sender, EventArgs e)
         {
-            // The method reads the dart locations from the file and draws them on the dartboard.
-            if (File.Exists("DartLocations.txt"))
+            roundInProgress = false;     // leaves play mode (an unfinished round is not logged)
+            reviewMode = true;
+            currentRound = 0;
+            throwCount = 0;
+            ClearDartBoard();
+
+            LoadRounds();
+            RoundsListBox.Items.Clear();
+            foreach (int[] round in loggedRounds)
             {
-                string[] lines = File.ReadAllLines("DartLocations.txt");
-                foreach (string line in lines)
-                {
-                    string[] parts = line.Split(',');
-                    if (parts.Length == 2 && int.TryParse(parts[0], out int x) && int.TryParse(parts[1], out int y))
-                    {
-                        DrawDart(x, y);
-                    }
-                }
+                RoundsListBox.Items.Add($"Round {round[0]}");
             }
-            else
+            RoundsListBox.Enabled = true;
+
+            if (loggedRounds.Count == 0)
             {
-                MessageBox.Show("No dart locations found. Please throw some darts first.");
+                MessageBox.Show("No rounds found. Play a round first.");
             }
+            UpdateLabels();
 
         }
 
         private void RoundsListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (!reviewMode || RoundsListBox.SelectedIndex < 0)
+            {
+                return;                  // nothing valid selected
+            }
 
+            int[] round = loggedRounds[RoundsListBox.SelectedIndex]; // same order as the list
+            ClearDartBoard();
+            for (int i = 1; i < 7; i += 2)   // positions 1,3,5 are X; 2,4,6 are Y
+            {
+                DrawDart(round[i], round[i + 1]);
+            }
+            currentRound = round[0];
+            throwCount = 3;
+            UpdateLabels();
         }
     }
 }
